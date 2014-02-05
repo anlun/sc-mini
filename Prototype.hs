@@ -15,8 +15,8 @@ buildFTree :: Machine Conf -> Conf -> Tree Conf
 buildFTree m e = bft m nameSupply e
 
 bft :: Machine Conf -> NameSupply -> Conf -> Tree Conf
-bft d ns e | whistle e = uncurry (bft d) (fullGeneralize ns e)
---bft d (n:ns) e | whistle e = bft d ns $ generalize n e
+--bft d ns e | whistle e = uncurry (bft d) (fullGeneralize ns e)
+bft d (n:ns) e | whistle e = bft d ns $ generalize n e
 bft d ns     t | otherwise = case d ns t of
 	Decompose ds -> Node t $ Decompose $ map (bft d ns) ds
 	Transient e -> Node t $ Transient $ bft d ns e

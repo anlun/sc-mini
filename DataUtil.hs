@@ -34,7 +34,7 @@ gDef p gname cname = head [g | g@(GDef _ (Pat c _) _ _) <- gDefs p gname, c == c
 
 (//) :: Expr -> Subst -> Expr
 (Var x)           // sub = maybe (Var x) id (lookup x sub)
-(Ctr name args)   // sub = Ctr name (map (// sub) args)
+(Ctr name args)   // sub = Ctr   name (map (// sub) args)
 (FCall name args) // sub = FCall name (map (// sub) args)
 (GCall name args) // sub = GCall name (map (// sub) args)
 (Let (x, e1) e2)  // sub = Let (x, (e1 // sub)) (e2 // sub)
