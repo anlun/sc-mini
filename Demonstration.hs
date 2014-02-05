@@ -13,6 +13,7 @@ import Data.Maybe
 import Generator
 import Prototype
 import Deforester
+import Inlining
 
 prog1 :: Program
 prog1 = read
@@ -143,7 +144,13 @@ demo18 = do
 	putStrLn "\ntransformation:\n"
 	putStrLn (show c2)
 	putStrLn (show p2)
-	
+
+demo18' = do
+	let (c2, p2) = transform ((read "gEven(fSqr(x))"), prog1)
+	putStrLn "\ntransformation:\n"
+	putStrLn (show c2)
+	putStrLn (show $ inline p2)
+
 -- even/sqr - deforestation
 demo19 = do
 	let (c2, p2) = deforest ((read "gEven(fSqr(x))"), prog1)
