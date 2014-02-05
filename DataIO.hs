@@ -76,48 +76,15 @@ pprintTree indent msg (Node expr next) = make next where
 	make (Variants cs) = 
 		(indent ++ msg) :  (indent ++ "|__" ++  show expr) : (concat (map (\(x, t) -> pprintTree (indent ++ " ") ("?" ++ show x) t) cs))
 
-instance Show Expr where
-	show (Ctr "Nil" []) = "``\'\'"
-	show (Ctr "Cons" [Ctr "B" [], Ctr "Nil" []]) = "``B\'\'"
-	show (Ctr "Cons" [Ctr "A" [], (Ctr "Cons" [Ctr "B" [], Ctr "Nil" []])]) = "``AB\'\'"
-	show (Ctr "Cons" [Ctr "A" [], (Ctr "Cons" [Ctr "A" [], (Ctr "Cons" [Ctr "B" [], Ctr "Nil" []])])]) = "``AAB\'\'"
-	show (Ctr "Cons" [x, y]) = (show x) ++ ":" ++ (show y)
-	show (Ctr "A" []) = "\'A\'"
-	show (Ctr "B" []) = "\'B\'"
-	show (Var n) = n
-	show (Ctr n es) = n ++ "(" ++ (intercalate ", " (map show es)) ++ ")"
-	show (FCall n es) = (fn n) ++ "(" ++ (intercalate ", " (map show es)) ++ ")"
-	show (GCall n es) = (fn n) ++ "(" ++ (intercalate ", " (map show es)) ++ ")"
-	show (Let (v, e1) e2) = "let " ++ v ++ " = " ++ (show e1) ++ " in " ++ (show e2)
-	show (MultiLet  vl e) = "Mlet " ++ (foldl (\s (v, e) -> s ++ "; " ++ v ++ " = " ++ (show e)) "" vl) ++ " in " ++ (show e)
-
-fn :: String -> String	
-fn (_:s:ss) = (toLower s) : ss
-
 instance Show FDef where
 	show (FDef n args body) = (fn n) ++ "(" ++ intercalate ", " args ++ ") = " ++ (show body) ++ ";"
 
 instance Show GDef where
 	show (GDef n p args body) = (fn n) ++ "(" ++ intercalate ", " (show p:args) ++ ") = " ++ (show body) ++ ";"
 
-instance Show Pat where
-	show (Pat "Nil" vs) = "``\'\'"
-	show (Pat "Cons" [v1, v2]) = v1 ++ ":" ++ v2
-	show (Pat cn vs) = cn ++ "(" ++ intercalate "," vs ++ ")"
-	
-instance Show Contract where
-	show (Contract n p) = n ++ " == " ++ (show p)
-	
 instance Show Program where
 	show (Program fs gs) = intercalate "\n" $ (map show fs) ++ (map show gs)
 	
-instance Show a => Show (Step a) where
-	show (Transient a) = "=> " ++ (show a)
-	show (Variants vs) = intercalate "\n" $ map (\(c, e) -> (show c) ++ " => " ++ (show e)) vs 
-	show Stop = "!"
-	show (Decompose ds) = show ds
-	show (Fold e _) = "↑" ++ (show e)
-
 -- Latex
 pprintLTree :: Graph Conf -> String
 pprintLTree (Node expr next) = make next where

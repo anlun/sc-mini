@@ -94,8 +94,8 @@ size (GCall _ args) = 1 + sum (map size args)
 size (Let (_, e1) e2) = 1 + (size e1) + (size e2)
 size (MultiLet   l e) = 1 + (size e) + (sum $ map (size . snd) l)
 
-nodeLabel :: Node a -> a
+nodeLabel :: Show a => Node a -> a
 nodeLabel (Node l _) = l
 
-step :: Node a -> Step (Graph a)
+step :: Show a => Node a -> Step (Graph a)
 step (Node _ s) = s

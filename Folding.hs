@@ -12,7 +12,7 @@ tieKnot ns n t@(Node e _) =
 		[] -> fixTree (tieKnot (n:ns)) t
 		(k, r):_ -> Node e (Fold k r)
 
-fixTree :: (Node t -> Tree t -> Graph t) -> Tree t -> Graph t
+fixTree :: Show t => (Node t -> Tree t -> Graph t) -> Tree t -> Graph t
 fixTree f (Node e (Transient c)) = t where
 	t = Node e $ Transient $ f t c
 fixTree f (Node e (Decompose cs)) = t where 

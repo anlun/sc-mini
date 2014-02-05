@@ -23,7 +23,7 @@ bft d ns     t | otherwise = case d ns t of
 	Stop -> Node t Stop
 	Variants cs -> Node t $ Variants [(c, bft d (unused c ns) e) | (c, e) <- cs]
 
-sizeBound = 40
+sizeBound = 2
 whistle :: Expr -> Bool
 whistle e@(FCall _ args) = not (all isVar args) && size e > sizeBound
 whistle e@(GCall _ args) = not (all isVar args) && size e > sizeBound
