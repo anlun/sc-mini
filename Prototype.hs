@@ -16,8 +16,8 @@ buildFTree :: Machine Conf -> Conf -> Tree Conf
 buildFTree m e = bft [] m nameSupply e
 
 bft :: [Expr] -> Machine Conf -> NameSupply -> Conf -> Tree Conf
-bft el d ns e | homeoWhistle e el = uncurry (bft (e:el) d) (fullGeneralize ns e)
---bft el d ns e | whistle e = uncurry (bft el d) (fullGeneralize ns e)
+--bft el d ns e | homeoWhistle e el = uncurry (bft (e:el) d) (fullGeneralize ns e)
+bft el d ns e | whistle e = uncurry (bft el d) (fullGeneralize ns e)
 --bft d ns e | whistle e = uncurry (bft d) (fullGeneralize ns e)
 --bft d (n:ns) e | whistle e = bft d ns $ generalize n e
 bft el d ns t | otherwise = case d ns t of

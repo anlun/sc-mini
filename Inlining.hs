@@ -39,7 +39,7 @@ inline (Program fDefs gDefs) = Program woSynoFDefs woSynoGDefs
 
 simplify :: FDef -> Expr -> Expr
 simplify fDef (Ctr   cn args) = Ctr   cn $ map (simplify fDef) args
-simplify fDef@(FDef n _ body) (FCall cn _) | n == cn = body
+simplify fDef@(FDef n args body) (FCall cn cargs) | n == cn = (//) body $ zip args cargs
 simplify fDef (FCall cn args) = FCall cn $ map (simplify fDef) args
 simplify fDef (GCall cn args) = GCall cn $ map (simplify fDef) args
 
