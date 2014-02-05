@@ -25,6 +25,9 @@ intStep p (GCall gname (e:es)) =
 intStep p (Let (x, e1) e2) =
 	e2 // [(x, e1)]
 
+intStep p (MultiLet l e) =
+	e // l
+
 eval :: Program -> Expr -> Expr
 eval p (Ctr name args) = 
 	Ctr name [eval p arg | arg <- args]
@@ -42,6 +45,9 @@ eval p (GCall gname (arg:args)) =
 
 eval p (Let (x, e1) e2) =
 	eval p (e2 // [(x, e1)])
+
+eval p (MultiLet l e) =
+	e // l
 
 sll_run :: Task -> Env -> Value
 sll_run (e, program) env = int program (e // env)

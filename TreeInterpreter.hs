@@ -16,6 +16,12 @@ intTree (Node e (Variants cs)) env =
 	head $ catMaybes $ map (try env) cs
 intTree (Node (Let (v, e1) e2) (Decompose [t1, t2])) env =
 	intTree t2 ((v, intTree t1 env) : env)
+intTree (Node (MultiLet l e) (Decompose tl)) env =
+	intTree (head tl) $ (++) env
+                    $ map (\(v, e) -> (v, intTree e env))
+                    $ zip (map fst l)
+                    $ tail tl
+
 intTree (Node _ (Fold t ren)) env = 
 	intTree t $ map (\(k, v) -> (renKey k, v)) env where
 		renKey k = maybe k fst (find ((k ==) . snd)  ren)

@@ -20,6 +20,7 @@ driveMachine p = drive where
 	drive ns (Ctr _ []) = Stop
 	drive ns (Ctr _ args) = Decompose args
 	drive ns (Let (x, t1) t2) = Decompose [t1, t2]
+	drive ns (MultiLet l t) = Decompose (t:(map snd l))
 	drive ns (FCall name args) = Transient $ e // (zip vs args) where 
 		FDef _ vs e = fDef p name
 	drive ns (GCall gn (Ctr cn cargs : args)) = Transient $ e // sub where

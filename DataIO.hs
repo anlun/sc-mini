@@ -89,6 +89,7 @@ instance Show Expr where
 	show (FCall n es) = (fn n) ++ "(" ++ (intercalate ", " (map show es)) ++ ")"
 	show (GCall n es) = (fn n) ++ "(" ++ (intercalate ", " (map show es)) ++ ")"
 	show (Let (v, e1) e2) = "let " ++ v ++ " = " ++ (show e1) ++ " in " ++ (show e2)
+	show (MultiLet  vl e) = "Mlet " ++ (foldl (\s (v, e) -> s ++ "; " ++ v ++ " = " ++ (show e)) "" vl) ++ " in " ++ (show e)
 
 fn :: String -> String	
 fn (_:s:ss) = (toLower s) : ss

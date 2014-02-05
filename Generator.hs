@@ -17,6 +17,10 @@ res ns mp (Node (Ctr cname _) (Decompose ts)) = (Ctr cname args, p1, ns1) where
 res ns mp (Node (Let (v, _) _) (Decompose ts)) = (e2 // [(v, e1)], p1, ns1) where
 	([e1, e2], p1, ns1) = res' ns mp ts
 
+res ns mp (Node (MultiLet l _) (Decompose ts)) =
+  (head el // zip (map fst $ tail l) el, p1, ns1) where
+	  (el, p1, ns1) = res' ns mp ts
+
 res (n:ns) mp (Node e (Transient t)) = (fcall, Program ((FDef f1 vs body):fs) gs, ns1) where
 	vs = vnames e
 	f1 = "ff" ++ (tail n)

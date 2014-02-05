@@ -15,7 +15,8 @@ buildFTree :: Machine Conf -> Conf -> Tree Conf
 buildFTree m e = bft m nameSupply e
 
 bft :: Machine Conf -> NameSupply -> Conf -> Tree Conf
-bft d (n:ns) e | whistle e = bft d ns $ generalize n e
+bft d ns e | whistle e = uncurry (bft d) (fullGeneralize ns e)
+--bft d (n:ns) e | whistle e = bft d ns $ generalize n e
 bft d ns     t | otherwise = case d ns t of
 	Decompose ds -> Node t $ Decompose $ map (bft d ns) ds
 	Transient e -> Node t $ Transient $ bft d ns e
@@ -27,6 +28,15 @@ whistle :: Expr -> Bool
 whistle e@(FCall _ args) = not (all isVar args) && size e > sizeBound
 whistle e@(GCall _ args) = not (all isVar args) && size e > sizeBound
 whistle _ = False
+
+fullGeneralize :: NameSupply -> Expr -> (NameSupply, Expr)
+fullGeneralize nl (FCall f es) = (nl', MultiLet (zip nl es) (FCall f vl)) where
+    (vars, nl') = splitAt (length es) nl
+    vl = map (Var) vars
+
+fullGeneralize nl (GCall f es) = (nl', MultiLet (zip nl es) (GCall f vl)) where
+    (vars, nl') = splitAt (length es) nl
+    vl = map (Var) vars
 
 generalize :: Name -> Expr -> Expr
 generalize n (FCall f es) = 
