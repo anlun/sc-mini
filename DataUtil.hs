@@ -1,7 +1,7 @@
 module DataUtil(
 	isValue,isCall,isVar,size,
 	fDef, gDef, gDefs,
-	(//), renaming, vnames,nameSupply,
+	(//), renaming, vnames, vnames', nameSupply,
 	nodeLabel,isRepeated,unused
 	) where
 	
